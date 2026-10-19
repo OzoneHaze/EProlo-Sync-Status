@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EProlo Inventory Sync</title>
+  <style>
+    :root {
+      --bg: #f1f1f1; --card: #ffffff; --text: #303030; --muted: #616161; --line: #e3e3e3;
+      --ok-bg: #cdfee1; --ok-text: #0c5132; --bad-bg: #fee9e8; --bad-text: #8e1f0b; --dry-bg: #eaf4ff; --dry-text: #00527c;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    .sub { color: var(--muted); margin: 0 0 20px; }
+    .card { background: var(--card); border-radius: 12px; box-shadow: 0 1px 0 rgba(0,0,0,.07), 0 0 0 1px rgba(0,0,0,.04); padding: 16px 20px; margin-bottom: 16px; }
+    .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    h2 { font-size: 15px; margin: 0; }
+    .when { font-size: 18px; font-weight: 600; }
+    .ago { color: var(--muted); }
+    .badge { display: inline-block; border-radius: 8px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
+    .ok { background: var(--ok-bg); color: var(--ok-text); }
+    .bad { background: var(--bad-bg); color: var(--bad-text); }
+    .dry { background: var(--dry-bg); color: var(--dry-text); }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
+    .stat { border-top: 1px solid var(--line); padding-top: 10px; }
+    .num { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .label { color: var(--muted); font-size: 13px; }
+    .error { margin-top: 12px; color: var(--bad-text); word-break: break-word; }
+    .empty { color: var(--muted); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>EProlo Inventory Sync</h1>
+  <p class="sub">Runs daily at 03:17 UTC. Copies EPROLO private stock to China Warehouse for products tagged EPSync.</p>
+  <div id="live"></div>
+  <div id="last"></div>
+</main>
+<script>
+  const fmt = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+  function ago(iso) {
+    const m = Math.round((Date.now() - new Date(iso)) / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return `${m} min ago`;
+    const h = Math.round(m / 60);
+    return h < 48 ? `${h} h ago` : `${Math.round(h / 24)} days ago`;
+  }
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const stat = (n, label) => `<div class="stat"><div class="num">${n ?? '–'}</div><div class="label">${label}</div></div>`;
+
+  function card(title, run) {
+    if (!run) return `<div class="card"><div class="head"><h2>${title}</h2></div><p class="empty">No run yet.</p></div>`;
+    const badge = run.ok ? '<span class="badge ok">Succeeded</span>' : '<span class="badge bad">Failed</span>';
+    const dry = run.dryRun ? ' <span class="badge dry">Dry run, nothing written</span>' : '';
+    const changed = run.dryRun ? 'SKUs that would change' : 'SKUs changed';
+    const stats = run.error ? '' : `<div class="stats">
+        ${stat(run.inventoryUpdated, changed)}
+        ${stat(run.setNotStocked, run.dryRun ? 'Would set Not stocked at EPROLO' : 'Set Not stocked at EPROLO')}
+        ${stat(run.alreadyCorrect, 'Already correct')}
+        ${stat((run.inventoryFailed ?? 0) + (run.setNotStockedFailed ?? 0), 'Failed')}
+      </div>`;
+    return `<div class="card">
+      <div class="head"><h2>${title}</h2><div>${badge}${dry}</div></div>
+      <div class="when">${fmt(run.finishedAt)} <span class="ago">· ${ago(run.finishedAt)}</span></div>
+      ${stats}
+      ${run.error ? `<div class="error">${esc(run.error)}</div>` : ''}
+    </div>`;
+  }
+
+  fetch(`status.json?t=${Date.now()}`, { cache: 'no-store' })
+    .then((r) => (r.ok ? r.json() : {}))
+    .catch(() => ({}))
+    .then((s) => {
+      document.getElementById('live').innerHTML = card('Last live run', s.lastLiveRun);
+      const showLast = s.lastRun && s.lastRun.finishedAt !== s.lastLiveRun?.finishedAt;
+      document.getElementById('last').innerHTML = showLast ? card('Most recent run', s.lastRun) : '';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "lastRun": {
+    "finishedAt": "2026-10-19T14:07:05.198Z",
+    "dryRun": true,
+    "ok": true,
+    "taggedVariants": 18,
+    "inventoryUpdated": 0,
+    "inventoryFailed": 0,
+    "alreadyCorrect": 18,
+    "setNotStocked": 0,
+    "setNotStockedFailed": 0
+  }
+}
