@@ -29,12 +29,14 @@
     .label { color: var(--muted); font-size: 13px; }
     .error { margin-top: 12px; color: var(--bad-text); word-break: break-word; }
     .empty { color: var(--muted); }
+    .warn { background: #fff1e3; color: #5e4200; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-weight: 600; }
   </style>
 </head>
 <body>
 <main>
   <h1>EProlo Inventory Sync</h1>
-  <p class="sub">Runs daily at 03:17 UTC. Copies EPROLO private stock to China Warehouse for products tagged EPSync.</p>
+  <p class="sub">Runs automatically at 03:17 and 15:17 UTC. Copies EPROLO private stock to China Warehouse for products tagged EPSync.</p>
+  <div id="warn"></div>
   <div id="live"></div>
   <div id="last"></div>
 </main>
@@ -73,6 +75,13 @@
     .then((r) => (r.ok ? r.json() : {}))
     .catch(() => ({}))
     .then((s) => {
+      // Runs are due every 12 hours; warn once one is clearly missed.
+      const hours = s.lastLiveRun ? (Date.now() - new Date(s.lastLiveRun.finishedAt)) / 3600000 : Infinity;
+      if (hours > 14) {
+        document.getElementById('warn').innerHTML = `<div class="warn">⚠ No automatic run for ${
+          isFinite(hours) ? `${Math.round(hours)} hours` : 'a while'
+        }. Runs are due every 12 hours: check Actions in the EProlo-Inventory-Sync repo on GitHub.</div>`;
+      }
       document.getElementById('live').innerHTML = card('Last live run', s.lastLiveRun);
       const showLast = s.lastRun && s.lastRun.finishedAt !== s.lastLiveRun?.finishedAt;
       document.getElementById('last').innerHTML = showLast ? card('Most recent run', s.lastRun) : '';
