@@ -1,24 +1,24 @@
 {
   "lastRun": {
-    "finishedAt": "2026-10-22T08:44:44.139Z",
+    "finishedAt": "2026-10-22T19:13:50.837Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 145,
-    "inventoryUpdated": 9,
+    "inventoryUpdated": 8,
     "inventoryFailed": 0,
-    "alreadyCorrect": 136,
-    "setNotStocked": 7,
+    "alreadyCorrect": 137,
+    "setNotStocked": 0,
     "setNotStockedFailed": 0
   },
   "lastLiveRun": {
-    "finishedAt": "2026-10-22T08:44:44.139Z",
+    "finishedAt": "2026-10-22T19:13:50.837Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 145,
-    "inventoryUpdated": 9,
+    "inventoryUpdated": 8,
     "inventoryFailed": 0,
-    "alreadyCorrect": 136,
-    "setNotStocked": 7,
+    "alreadyCorrect": 137,
+    "setNotStocked": 0,
     "setNotStockedFailed": 0
   }
 }
