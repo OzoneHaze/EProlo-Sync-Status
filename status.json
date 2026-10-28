@@ -23,16 +23,30 @@
   },
   "cost": {
     "lastRun": {
-      "finishedAt": "2026-10-28T17:28:07.741Z",
+      "finishedAt": "2026-10-28T17:35:32.892Z",
       "dryRun": false,
-      "ok": false,
-      "error": "Shopify GraphQL error: [{\"message\":\"Access denied for metafieldsSet field. Required access: the same access level needed to mutate the owner resource. For instance, if you want to set\\na metafield on "
+      "ok": true,
+      "variants": 445,
+      "fromOrders": 37,
+      "fromList": 335,
+      "alreadyCorrect": 0,
+      "notFound": 73,
+      "failed": 0,
+      "rate": 0.89823,
+      "currency": "EUR"
     },
     "lastLiveRun": {
-      "finishedAt": "2026-10-28T17:28:07.741Z",
+      "finishedAt": "2026-10-28T17:35:32.892Z",
       "dryRun": false,
-      "ok": false,
-      "error": "Shopify GraphQL error: [{\"message\":\"Access denied for metafieldsSet field. Required access: the same access level needed to mutate the owner resource. For instance, if you want to set\\na metafield on "
+      "ok": true,
+      "variants": 445,
+      "fromOrders": 37,
+      "fromList": 335,
+      "alreadyCorrect": 0,
+      "notFound": 73,
+      "failed": 0,
+      "rate": 0.89823,
+      "currency": "EUR"
     }
   }
 }
