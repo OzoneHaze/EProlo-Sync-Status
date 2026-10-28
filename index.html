@@ -31,6 +31,11 @@
     .empty { color: var(--muted); }
     h3 { font-size: 16px; margin: 24px 0 8px; }
     .note { color: var(--muted); font-size: 13px; margin-top: 10px; }
+    .buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .btn { display: inline-block; background: #303030; color: #fff; text-decoration: none; border-radius: 8px; padding: 8px 14px; font-weight: 600; }
+    .btn:hover { background: #1a1a1a; }
+    .btn.secondary { background: #fff; color: #303030; box-shadow: inset 0 0 0 1px #c9c9c9; }
+    .btn.secondary:hover { background: #f6f6f6; }
     .warn { background: #fff1e3; color: #5e4200; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-weight: 600; }
   </style>
 </head>
@@ -46,6 +51,10 @@
   <p class="sub">Runs automatically at 04:47 UTC. Sets Cost per item and USD cost for products tagged StockRep (not EPSync) from the latest EPROLO order, or else the EPROLO product list.</p>
   <div id="cost-warn"></div>
   <div id="cost"></div>
+  <h3>Inventory report</h3>
+  <p class="sub">Created automatically every other day at 05:17 UTC: an Excel file with one tab per location, negative stock shown as 0.</p>
+  <div id="report-warn"></div>
+  <div id="report"></div>
 </main>
 <script>
   const fmt = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
@@ -120,6 +129,35 @@
       document.getElementById('cost').innerHTML = c.lastRun
         ? card('Last run', c.lastRun, costStats) + (costLastIsLive || !c.lastLiveRun ? '' : card('Last live run', c.lastLiveRun, costStats))
         : card('Last run', null);
+
+      // Inventory report: last run, download link, and a link to start one now on GitHub.
+      const rep = s.report?.lastRun;
+      const lastGood = s.report?.lastGood;
+      const repHours = rep ? (Date.now() - new Date(rep.finishedAt)) / 3600000 : Infinity;
+      if (repHours > 72) {
+        document.getElementById('report-warn').innerHTML = `<div class="warn">⚠ No inventory report for ${
+          isFinite(repHours) ? `${Math.round(repHours)} hours` : 'a while'
+        }. It's due every other day: check Actions (Inventory Report) in the EProlo-Inventory-Sync repo on GitHub.</div>`;
+      }
+      if (!rep) {
+        document.getElementById('report').innerHTML = '<div class="card"><p class="empty">No report yet.</p></div>';
+      } else {
+        const badge = rep.ok ? '<span class="badge ok">Succeeded</span>' : '<span class="badge bad">Failed</span>';
+        const tabs = (rep.locations || []).map((l) => `${esc(l.name)} (${l.variants} variants)`).join(', ');
+        const download = rep.ok && rep.url
+          ? `<a class="btn" href="${esc(rep.url)}" target="_blank" rel="noopener">Download report (Excel)</a>`
+          : lastGood?.url ? `<a class="btn" href="${esc(lastGood.url)}" target="_blank" rel="noopener">Download the last good report (${fmt(lastGood.finishedAt)})</a>` : '';
+        const runNow = rep.runUrl ? `<a class="btn secondary" href="${esc(rep.runUrl)}" target="_blank" rel="noopener">Create a report now</a>` : '';
+        document.getElementById('report').innerHTML = `<div class="card">
+          <div class="head"><h2>Last report</h2><div>${badge}</div></div>
+          <div class="when">${fmt(rep.finishedAt)} <span class="ago">· ${ago(rep.finishedAt)}</span></div>
+          ${rep.error ? `<div class="error">${esc(rep.error)}</div>` : ''}
+          ${tabs ? `<div class="note">Tabs: ${tabs}</div>` : ''}
+          <div class="buttons">${download}${runNow}</div>
+          <div class="note">Both buttons open GitHub, so you need to be signed in with access to the repo.
+            To create a report now, click <b>Run workflow</b> there; the new report shows here about a minute later.</div>
+        </div>`;
+      }
     });
 </script>
 </body>
