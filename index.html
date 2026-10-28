@@ -44,6 +44,7 @@
   <div id="last"></div>
   <h3>Cost sync</h3>
   <p class="sub">Runs automatically at 04:47 UTC. Sets Cost per item and USD cost for products tagged StockRep (not EPSync) from the latest EPROLO order, or else the EPROLO product list.</p>
+  <div id="cost-warn"></div>
   <div id="cost"></div>
 </main>
 <script>
@@ -108,6 +109,13 @@
       const showLast = s.lastRun && s.lastRun.finishedAt !== s.lastLiveRun?.finishedAt;
       document.getElementById('last').innerHTML = showLast ? card('Most recent run', s.lastRun) : '';
       const c = s.cost || {};
+      // The cost sync runs daily; warn when no live run happened for 48 hours.
+      const costHours = c.lastLiveRun ? (Date.now() - new Date(c.lastLiveRun.finishedAt)) / 3600000 : Infinity;
+      if (costHours > 48) {
+        document.getElementById('cost-warn').innerHTML = `<div class="warn">⚠ No automatic cost sync for ${
+          isFinite(costHours) ? `${Math.round(costHours)} hours` : 'a while'
+        }. It's due daily at 04:47 UTC: check Actions (EPROLO Cost Sync) in the EProlo-Inventory-Sync repo on GitHub.</div>`;
+      }
       const costLastIsLive = c.lastRun && c.lastRun.finishedAt === c.lastLiveRun?.finishedAt;
       document.getElementById('cost').innerHTML = c.lastRun
         ? card('Last run', c.lastRun, costStats) + (costLastIsLive || !c.lastLiveRun ? '' : card('Last live run', c.lastLiveRun, costStats))
