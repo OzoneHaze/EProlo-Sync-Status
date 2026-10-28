@@ -20,5 +20,19 @@
     "alreadyCorrect": 134,
     "setNotStocked": 12,
     "setNotStockedFailed": 0
+  },
+  "cost": {
+    "lastRun": {
+      "finishedAt": "2026-10-28T17:28:07.741Z",
+      "dryRun": false,
+      "ok": false,
+      "error": "Shopify GraphQL error: [{\"message\":\"Access denied for metafieldsSet field. Required access: the same access level needed to mutate the owner resource. For instance, if you want to set\\na metafield on "
+    },
+    "lastLiveRun": {
+      "finishedAt": "2026-10-28T17:28:07.741Z",
+      "dryRun": false,
+      "ok": false,
+      "error": "Shopify GraphQL error: [{\"message\":\"Access denied for metafieldsSet field. Required access: the same access level needed to mutate the owner resource. For instance, if you want to set\\na metafield on "
+    }
   }
 }

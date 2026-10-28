@@ -29,16 +29,22 @@
     .label { color: var(--muted); font-size: 13px; }
     .error { margin-top: 12px; color: var(--bad-text); word-break: break-word; }
     .empty { color: var(--muted); }
+    h3 { font-size: 16px; margin: 24px 0 8px; }
+    .note { color: var(--muted); font-size: 13px; margin-top: 10px; }
     .warn { background: #fff1e3; color: #5e4200; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-weight: 600; }
   </style>
 </head>
 <body>
 <main>
   <h1>EProlo Inventory Sync</h1>
+  <h3>Stock sync</h3>
   <p class="sub">Runs automatically at 03:17 and 15:17 UTC. Copies EPROLO private stock to China Warehouse for products tagged EPSync.</p>
   <div id="warn"></div>
   <div id="live"></div>
   <div id="last"></div>
+  <h3>Cost sync</h3>
+  <p class="sub">Sets Cost per item and USD cost for products tagged StockRep (not EPSync) from the latest EPROLO order, or else the EPROLO product list.</p>
+  <div id="cost"></div>
 </main>
 <script>
   const fmt = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
@@ -52,17 +58,33 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const stat = (n, label) => `<div class="stat"><div class="num">${n ?? '–'}</div><div class="label">${label}</div></div>`;
 
-  function card(title, run) {
-    if (!run) return `<div class="card"><div class="head"><h2>${title}</h2></div><p class="empty">No run yet.</p></div>`;
-    const badge = run.ok ? '<span class="badge ok">Succeeded</span>' : '<span class="badge bad">Failed</span>';
-    const dry = run.dryRun ? ' <span class="badge dry">Dry run, nothing written</span>' : '';
-    const changed = run.dryRun ? 'SKUs that would change' : 'SKUs changed';
-    const stats = run.error ? '' : `<div class="stats">
-        ${stat(run.inventoryUpdated, changed)}
+  function stockStats(run) {
+    return `<div class="stats">
+        ${stat(run.inventoryUpdated, run.dryRun ? 'SKUs that would change' : 'SKUs changed')}
         ${stat(run.setNotStocked, run.dryRun ? 'Would set Not stocked at EPROLO' : 'Set Not stocked at EPROLO')}
         ${stat(run.alreadyCorrect, 'Already correct')}
         ${stat((run.inventoryFailed ?? 0) + (run.setNotStockedFailed ?? 0), 'Failed')}
       </div>`;
+  }
+
+  function costStats(run) {
+    const verb = run.dryRun ? 'Would update' : 'Updated';
+    const unchanged = (run.alreadyCorrect ?? 0) + (run.notFound ?? 0);
+    return `<div class="stats">
+        ${stat(run.fromOrders, `${verb} from EPROLO orders`)}
+        ${stat(run.fromList, `${verb} from the EPROLO product list`)}
+        ${stat(unchanged, 'Left unchanged')}
+        ${stat(run.failed, 'Failed')}
+      </div>
+      <div class="note">Left unchanged: ${run.alreadyCorrect ?? 0} already correct, ${run.notFound ?? 0} not found in EPROLO.
+        ${run.rate ? ` Rate used: 1 USD = ${run.rate} ${esc(run.currency || '')}.` : ''}</div>`;
+  }
+
+  function card(title, run, statsFor = stockStats) {
+    if (!run) return `<div class="card"><div class="head"><h2>${title}</h2></div><p class="empty">No run yet.</p></div>`;
+    const badge = run.ok ? '<span class="badge ok">Succeeded</span>' : '<span class="badge bad">Failed</span>';
+    const dry = run.dryRun ? ' <span class="badge dry">Dry run, nothing written</span>' : ' <span class="badge ok">Live</span>';
+    const stats = run.error ? '' : statsFor(run);
     return `<div class="card">
       <div class="head"><h2>${title}</h2><div>${badge}${dry}</div></div>
       <div class="when">${fmt(run.finishedAt)} <span class="ago">· ${ago(run.finishedAt)}</span></div>
@@ -85,6 +107,11 @@
       document.getElementById('live').innerHTML = card('Last live run', s.lastLiveRun);
       const showLast = s.lastRun && s.lastRun.finishedAt !== s.lastLiveRun?.finishedAt;
       document.getElementById('last').innerHTML = showLast ? card('Most recent run', s.lastRun) : '';
+      const c = s.cost || {};
+      const costLastIsLive = c.lastRun && c.lastRun.finishedAt === c.lastLiveRun?.finishedAt;
+      document.getElementById('cost').innerHTML = c.lastRun
+        ? card('Last run', c.lastRun, costStats) + (costLastIsLive || !c.lastLiveRun ? '' : card('Last live run', c.lastLiveRun, costStats))
+        : card('Last run', null);
     });
 </script>
 </body>
