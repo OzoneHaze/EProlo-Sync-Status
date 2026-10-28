@@ -23,14 +23,14 @@
   },
   "cost": {
     "lastRun": {
-      "finishedAt": "2026-10-28T17:41:35.304Z",
+      "finishedAt": "2026-10-28T17:49:21.678Z",
       "dryRun": true,
       "ok": true,
       "variants": 439,
-      "fromOrders": 0,
+      "fromOrders": 2,
       "fromList": 0,
-      "alreadyCorrect": 366,
-      "notFound": 73,
+      "alreadyCorrect": 365,
+      "notFound": 72,
       "failed": 0,
       "rate": 0.89823,
       "currency": "EUR"
