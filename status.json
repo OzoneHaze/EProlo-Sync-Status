@@ -64,7 +64,7 @@
   },
   "report": {
     "lastRun": {
-      "finishedAt": "2026-10-28T18:31:45.343Z",
+      "finishedAt": "2026-10-29T11:29:53.965Z",
       "dryRun": false,
       "url": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/raw/main/reports/inventory-report.xlsx",
       "runUrl": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/inventory-report.yml",
@@ -72,7 +72,7 @@
       "locations": [
         {
           "name": "China Warehouse",
-          "variants": 123
+          "variants": 140
         },
         {
           "name": "Sweden Warehouse",
@@ -81,7 +81,7 @@
       ]
     },
     "lastLiveRun": {
-      "finishedAt": "2026-10-28T18:31:45.343Z",
+      "finishedAt": "2026-10-29T11:29:53.965Z",
       "dryRun": false,
       "url": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/raw/main/reports/inventory-report.xlsx",
       "runUrl": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/inventory-report.yml",
@@ -89,7 +89,7 @@
       "locations": [
         {
           "name": "China Warehouse",
-          "variants": 123
+          "variants": 140
         },
         {
           "name": "Sweden Warehouse",
@@ -98,7 +98,7 @@
       ]
     },
     "lastGood": {
-      "finishedAt": "2026-10-28T18:31:45.343Z",
+      "finishedAt": "2026-10-29T11:29:53.965Z",
       "dryRun": false,
       "url": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/raw/main/reports/inventory-report.xlsx",
       "runUrl": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/inventory-report.yml",
@@ -106,7 +106,7 @@
       "locations": [
         {
           "name": "China Warehouse",
-          "variants": 123
+          "variants": 140
         },
         {
           "name": "Sweden Warehouse",
