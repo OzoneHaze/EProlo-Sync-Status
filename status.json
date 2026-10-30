@@ -1,24 +1,24 @@
 {
   "lastRun": {
-    "finishedAt": "2026-10-29T20:18:21.494Z",
+    "finishedAt": "2026-10-30T10:12:41.634Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 163,
-    "inventoryUpdated": 44,
+    "inventoryUpdated": 36,
     "inventoryFailed": 0,
-    "alreadyCorrect": 119,
-    "setNotStocked": 3,
+    "alreadyCorrect": 127,
+    "setNotStocked": 27,
     "setNotStockedFailed": 0
   },
   "lastLiveRun": {
-    "finishedAt": "2026-10-29T20:18:21.494Z",
+    "finishedAt": "2026-10-30T10:12:41.634Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 163,
-    "inventoryUpdated": 44,
+    "inventoryUpdated": 36,
     "inventoryFailed": 0,
-    "alreadyCorrect": 119,
-    "setNotStocked": 3,
+    "alreadyCorrect": 127,
+    "setNotStocked": 27,
     "setNotStockedFailed": 0
   },
   "cost": {
@@ -116,14 +116,14 @@
     }
   },
   "lastGood": {
-    "finishedAt": "2026-10-29T20:18:21.494Z",
+    "finishedAt": "2026-10-30T10:12:41.634Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 163,
-    "inventoryUpdated": 44,
+    "inventoryUpdated": 36,
     "inventoryFailed": 0,
-    "alreadyCorrect": 119,
-    "setNotStocked": 3,
+    "alreadyCorrect": 127,
+    "setNotStocked": 27,
     "setNotStockedFailed": 0
   }
 }
