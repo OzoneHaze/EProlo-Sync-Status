@@ -1,6 +1,6 @@
 {
   "lastRun": {
-    "finishedAt": "2026-10-31T19:18:29.911Z",
+    "finishedAt": "2026-11-01T10:37:54.246Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 163,
@@ -11,7 +11,7 @@
     "setNotStockedFailed": 0
   },
   "lastLiveRun": {
-    "finishedAt": "2026-10-31T19:18:29.911Z",
+    "finishedAt": "2026-11-01T10:37:54.246Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 163,
@@ -116,7 +116,7 @@
     }
   },
   "lastGood": {
-    "finishedAt": "2026-10-31T19:18:29.911Z",
+    "finishedAt": "2026-11-01T10:37:54.246Z",
     "dryRun": false,
     "ok": true,
     "taggedVariants": 163,
