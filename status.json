@@ -128,8 +128,8 @@
   },
   "clean": {
     "lastRun": {
-      "finishedAt": "2026-11-02T01:06:27.373Z",
-      "dryRun": false,
+      "finishedAt": "2026-11-02T01:07:53.634Z",
+      "dryRun": true,
       "runUrl": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/clean-orders.yml",
       "ok": false,
       "ordersChecked": 99,
