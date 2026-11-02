@@ -56,7 +56,7 @@
   <div id="report-warn"></div>
   <div id="report"></div>
   <h3>Order cleanup</h3>
-  <p class="sub">Removes non-physical products (Shopify "requires shipping" off, e.g. Shipping Protection) from unpaid EPROLO orders.</p>
+  <p class="sub">Removes Shipping Protection (not a physical product in Shopify) from unpaid EPROLO orders, and warns if other products are set up as not physical.</p>
   <div id="clean"></div>
 </main>
 <script>
@@ -179,7 +179,11 @@
             ${stat(cl.failed, 'Failed')}
           </div>`}`;
       }
-      document.getElementById('clean').innerHTML = `<div class="card">${cleanBody}
+      const cleanWarn = cl?.otherNonPhysical?.length
+        ? `<div class="warn">⚠ Other products are set up as not physical and were <b>not</b> removed: ${cl.otherNonPhysical.map(esc).join(', ')}.
+            Only products with "${esc(cl.allowedName || 'Shipping Protection')}" in the name are removed. Check these in Shopify (Physical product).</div>`
+        : '';
+      document.getElementById('clean').innerHTML = cleanWarn + `<div class="card">${cleanBody}
         <div class="buttons">${cleanBtn}</div>
         <div class="note">Opens GitHub (sign-in needed). Click <b>Run workflow</b> there and untick <b>Dry run</b> to remove the rows for real.
           The result shows here about a minute later.</div></div>`;

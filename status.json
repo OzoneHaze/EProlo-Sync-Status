@@ -128,14 +128,17 @@
   },
   "clean": {
     "lastRun": {
-      "finishedAt": "2026-11-02T01:00:57.251Z",
+      "finishedAt": "2026-11-02T01:04:57.592Z",
       "dryRun": true,
       "runUrl": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/clean-orders.yml",
       "ok": true,
       "ordersChecked": 99,
       "removed": 14,
       "failed": 0,
-      "skipped": 0
+      "skipped": 0,
+      "allowedName": "Shipping Protection",
+      "otherNonPhysical": [],
+      "heldRows": 0
     }
   }
 }
