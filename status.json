@@ -1,13 +1,13 @@
 {
   "lastRun": {
-    "finishedAt": "2026-11-01T19:41:05.316Z",
-    "dryRun": false,
+    "finishedAt": "2026-11-02T10:17:21.388Z",
+    "dryRun": true,
     "ok": true,
     "taggedVariants": 163,
-    "inventoryUpdated": 60,
+    "inventoryUpdated": 34,
     "inventoryFailed": 0,
-    "alreadyCorrect": 103,
-    "setNotStocked": 59,
+    "alreadyCorrect": 129,
+    "setNotStocked": 2,
     "setNotStockedFailed": 0
   },
   "lastLiveRun": {
