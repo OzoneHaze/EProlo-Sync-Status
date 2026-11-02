@@ -55,6 +55,9 @@
   <p class="sub">Created automatically every other day at 05:17 UTC: an Excel file with one tab per location, only SKUs with stock (more than 0 units).</p>
   <div id="report-warn"></div>
   <div id="report"></div>
+  <h3>Order cleanup</h3>
+  <p class="sub">Removes non-physical products (Shopify "requires shipping" off, e.g. Shipping Protection) from unpaid EPROLO orders.</p>
+  <div id="clean"></div>
 </main>
 <script>
   const fmt = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
@@ -158,6 +161,28 @@
             To create a report now, click <b>Run workflow</b> there; the new report shows here about a minute later.</div>
         </div>`;
       }
+
+      // Order cleanup: last run and a link to start one on GitHub.
+      const cl = s.clean?.lastRun;
+      const cleanUrl = cl?.runUrl || 'https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/clean-orders.yml';
+      const cleanBtn = `<a class="btn" href="${esc(cleanUrl)}" target="_blank" rel="noopener">Clean up pending orders</a>`;
+      let cleanBody = '<p class="empty">Not run yet.</p>';
+      if (cl) {
+        const badge = (cl.ok ? '<span class="badge ok">Succeeded</span>' : '<span class="badge bad">Failed</span>')
+          + (cl.dryRun ? ' <span class="badge dry">Dry run, nothing removed</span>' : ' <span class="badge ok">Live</span>');
+        cleanBody = `<div class="head"><h2>Last run</h2><div>${badge}</div></div>
+          <div class="when">${fmt(cl.finishedAt)} <span class="ago">· ${ago(cl.finishedAt)}</span></div>
+          ${cl.error ? `<div class="error">${esc(cl.error)}</div>` : `<div class="stats">
+            ${stat(cl.ordersChecked, 'Unpaid orders checked')}
+            ${stat(cl.removed, cl.dryRun ? 'Rows that would be removed' : 'Rows removed')}
+            ${stat(cl.skipped, 'Orders left alone (only non-physical rows)')}
+            ${stat(cl.failed, 'Failed')}
+          </div>`}`;
+      }
+      document.getElementById('clean').innerHTML = `<div class="card">${cleanBody}
+        <div class="buttons">${cleanBtn}</div>
+        <div class="note">Opens GitHub (sign-in needed). Click <b>Run workflow</b> there and untick <b>Dry run</b> to remove the rows for real.
+          The result shows here about a minute later.</div></div>`;
     });
 </script>
 </body>

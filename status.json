@@ -125,5 +125,17 @@
     "alreadyCorrect": 103,
     "setNotStocked": 59,
     "setNotStockedFailed": 0
+  },
+  "clean": {
+    "lastRun": {
+      "finishedAt": "2026-11-02T01:00:57.251Z",
+      "dryRun": true,
+      "runUrl": "https://github.com/OzoneHaze/EProlo-Inventory-Sync/actions/workflows/clean-orders.yml",
+      "ok": true,
+      "ordersChecked": 99,
+      "removed": 14,
+      "failed": 0,
+      "skipped": 0
+    }
   }
 }
